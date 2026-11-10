@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101827">
+<title>Orlando AI — Asistente docente</title>
+<style>
+:root{--bg:#0b1220;--panel:#111c2d;--panel2:#172438;--line:#26364d;--text:#edf3fb;--muted:#9aabc0;--accent:#8ab4f8;--accent2:#b8d4ff;--green:#8ed6b0;--red:#ff9b9b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;height:100dvh;overflow:hidden}
+button,input,textarea,select{font:inherit}button{cursor:pointer;border:1px solid var(--line);border-radius:12px;background:var(--panel2);color:var(--text);padding:10px 13px}button:hover{border-color:var(--accent)}button.primary{background:var(--accent);color:#102033;border-color:var(--accent);font-weight:700}button.ghost{background:transparent}button:disabled{opacity:.45;cursor:not-allowed}
+#app{height:100%;display:grid;grid-template-columns:280px 1fr}.sidebar{background:#0e1929;border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0;padding:18px 14px;gap:14px}.brand{display:flex;align-items:center;gap:11px;padding:4px 5px 12px}.logo{width:38px;height:38px;border-radius:13px;background:linear-gradient(135deg,#8ab4f8,#8ed6b0);color:#0d1b2b;display:grid;place-items:center;font-size:20px;font-weight:900}.brand strong{font-size:18px}.brand small{display:block;color:var(--muted);font-size:11px}.side-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.side-actions button{font-size:12px;padding:9px 6px}.side-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;padding:5px 7px}.school-list{overflow:auto;display:flex;flex-direction:column;gap:6px;min-height:80px}.school{display:flex;align-items:center;gap:9px;text-align:left;width:100%;background:transparent;border-color:transparent;padding:10px}.school.active{background:var(--panel2);border-color:var(--line)}.school .school-dot{width:9px;height:9px;background:var(--green);border-radius:50%;flex:none}.school span:nth-child(2){overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}.chat-list{overflow:auto;display:flex;flex-direction:column;gap:5px}.chatitem{width:100%;text-align:left;background:transparent;border-color:transparent;color:var(--muted);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.chatitem.active{background:var(--panel2);color:var(--text)}.side-bottom{margin-top:auto;border-top:1px solid var(--line);padding-top:12px;display:grid;gap:8px}.userline{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px;overflow-wrap:anywhere}.main{display:flex;flex-direction:column;min-width:0;min-height:0}.topbar{height:64px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 22px;gap:12px}.topbar-left{min-width:0}.topbar h1{font-size:16px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.topbar p{margin:0;color:var(--muted);font-size:11px}.top-actions{display:flex;gap:8px}.top-actions button{font-size:12px;padding:8px 10px}.chat-area{flex:1;overflow:auto;padding:26px max(18px,calc((100% - 850px)/2));scroll-behavior:smooth}.welcome{max-width:760px;margin:9vh auto 0;text-align:center}.welcome .biglogo{width:58px;height:58px;border-radius:20px;background:linear-gradient(135deg,#8ab4f8,#8ed6b0);color:#102033;display:grid;place-items:center;font-size:29px;font-weight:900;margin:0 auto 18px}.welcome h2{font-size:clamp(25px,4vw,36px);margin:0 0 8px}.welcome p{color:var(--muted);margin:0 auto 26px;max-width:540px}.suggestions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;text-align:left}.suggestions button{padding:14px;background:var(--panel);text-align:left}.suggestions b{display:block;font-size:13px}.suggestions small{color:var(--muted);font-size:12px}.message{max-width:760px;margin:0 auto 22px;display:flex;gap:12px;align-items:flex-start}.avatar{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;flex:none;background:var(--panel2);font-size:13px;font-weight:700}.message.user .avatar{background:#24466a}.bubble{min-width:0;flex:1;padding:3px 0;white-space:pre-wrap;overflow-wrap:anywhere}.bubble p{margin:0 0 9px}.bubble pre{white-space:pre-wrap;background:#09111d;border:1px solid var(--line);padding:12px;border-radius:10px;overflow:auto}.bubble table{border-collapse:collapse;width:100%;margin:10px 0}.bubble td,.bubble th{border:1px solid var(--line);padding:7px;text-align:left}.pending{max-width:760px;margin:0 auto 14px;padding:14px;border:1px solid #79683a;background:#2a2517;border-radius:13px}.pending strong{display:block;margin-bottom:6px}.pending pre{white-space:pre-wrap;font-size:12px;color:#e9ddb8}.pending .buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.composer-wrap{padding:10px 18px 17px}.composer{max-width:850px;margin:auto;border:1px solid var(--line);background:var(--panel);border-radius:20px;padding:10px 12px;box-shadow:0 8px 35px #0003}.composer textarea{width:100%;resize:none;min-height:54px;max-height:180px;border:0;outline:0;background:transparent;color:var(--text);padding:7px}.composer-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px}.composer-bottom small{color:var(--muted)}.composer-buttons{display:flex;gap:7px}.composer-buttons button{padding:8px 11px}.attach-chip{font-size:11px;color:var(--green);padding:4px 8px}.status{font-size:11px;color:var(--muted)}.status.ok{color:var(--green)}.status.err{color:var(--red)}.modal{position:fixed;inset:0;background:#0009;display:none;place-items:center;padding:18px;z-index:10}.modal.show{display:grid}.modalbox{width:min(440px,100%);background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 20px 80px #0008}.modalbox h3{margin:0 0 6px}.modalbox p{color:var(--muted);font-size:13px;margin:0 0 16px}.modalbox input{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:#0b1422;color:var(--text);margin:6px 0 12px}.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}.authbox{max-width:400px}.empty-note{color:var(--muted);font-size:12px;padding:10px}.mobile-menu{display:none}
+@media(max-width:760px){#app{grid-template-columns:1fr}.sidebar{position:fixed;z-index:5;inset:0 auto 0 0;width:min(300px,85vw);transform:translateX(-102%);transition:transform .2s;box-shadow:15px 0 50px #0007}.sidebar.open{transform:translateX(0)}.mobile-menu{display:inline-block}.topbar{padding:0 13px}.top-actions button{padding:7px}.chat-area{padding:20px 14px}.composer-wrap{padding:8px 10px 12px}.suggestions{grid-template-columns:1fr}.welcome{margin-top:5vh}.welcome h2{font-size:27px}}
+</style>
+</head>
+<body>
+<div id="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><div class="logo">O</div><div><strong>Orlando AI</strong><small>Asistente inteligente docente</small></div></div>
+  <div class="side-actions"><button id="newChat">＋ Nuevo chat</button><button id="addSchool">＋ Colegio</button></div>
+  <div class="side-label">Mis colegios</div><div class="school-list" id="schoolList"><div class="empty-note">Inicia sesión para ver tus colegios.</div></div>
+  <div class="side-label">Conversaciones</div><div class="chat-list" id="chatList"><div class="empty-note">Selecciona un colegio.</div></div>
+  <div class="side-bottom"><div class="userline" id="userLine">No has iniciado sesión</div><button class="ghost" id="accountBtn">Iniciar sesión / Crear cuenta</button><button class="ghost" id="signOutBtn" style="display:none">Cerrar sesión</button></div>
+</aside>
+<main class="main">
+  <header class="topbar"><div class="topbar-left"><h1 id="schoolTitle">Orlando AI</h1><p id="schoolSubtitle">Tu espacio de trabajo docente</p></div><div class="top-actions"><button class="mobile-menu" id="menuBtn">☰</button><button id="exportWord">Word</button><button id="exportPdf">PDF</button></div></header>
+  <section class="chat-area" id="chatArea"><div class="welcome" id="welcome"><div class="biglogo">O</div><h2>¿En qué puedo ayudarte hoy?</h2><p>Selecciona o crea un colegio. Orlando puede ayudarte a organizar información académica, preparar clases y crear evaluaciones.</p><div class="suggestions"><button data-prompt="Crea un examen complejo de 20 preguntas sobre un tema que te indicaré."><b>Crear un examen</b><small>Evaluaciones, cuestionarios y rúbricas</small></button><button data-prompt="Ayúdame a registrar la asistencia de hoy."><b>Registrar asistencia</b><small>Presentes, ausentes y tardanzas</small></button><button data-prompt="Muéstrame un resumen de las calificaciones de mis estudiantes."><b>Analizar calificaciones</b><small>Promedios y evolución académica</small></button><button data-prompt="Quiero agregar un estudiante a este colegio."><b>Gestionar estudiantes</b><small>Altas, datos y observaciones</small></button></div></div><div id="messages"></div></section>
+  <div class="composer-wrap"><div class="composer"><div id="attachmentLabel" class="attach-chip"></div><textarea id="prompt" placeholder="Escribe a Orlando… (selecciona primero un colegio)" rows="2"></textarea><div class="composer-bottom"><div><small class="status" id="status">Conecta tu cuenta para comenzar.</small></div><div class="composer-buttons"><input id="imageInput" type="file" accept="image/*" multiple hidden><button id="attachBtn" title="Adjuntar imágenes">＋ Foto</button><button class="primary" id="sendBtn">Enviar ↑</button></div></div></div></div>
+</main></div>
+
+<div class="modal" id="authModal"><div class="modalbox authbox"><h3>Bienvenido a Orlando</h3><p>Inicia sesión o crea una cuenta. Tus datos estarán separados por usuario.</p><input id="email" type="email" placeholder="Correo electrónico"><input id="password" type="password" placeholder="Contraseña (mínimo 6 caracteres)"><div class="modal-actions"><button id="authCancel">Cancelar</button><button id="registerBtn">Crear cuenta</button><button class="primary" id="loginBtn">Entrar</button></div><div class="status" id="authStatus"></div></div></div>
+<div class="modal" id="schoolModal"><div class="modalbox"><h3>Agregar colegio</h3><p>Los chats, estudiantes y registros de cada colegio se guardan por separado.</p><input id="schoolName" placeholder="Nombre del colegio"><div class="modal-actions"><button id="schoolCancel">Cancelar</button><button class="primary" id="schoolSave">Crear colegio</button></div></div></div>
+<div class="modal" id="confirmModal"><div class="modalbox"><h3>Confirmar cambio</h3><p>Orlando propone modificar los registros. Revisa la operación antes de guardarla.</p><pre id="confirmDetails" style="white-space:pre-wrap;font-size:12px;color:#d7e4f4"></pre><div class="modal-actions"><button id="rejectChange">Cancelar</button><button class="primary" id="acceptChange">Confirmar y guardar</button></div></div></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import { getFirestore, collection, doc, addDoc, setDoc, getDocs, getDoc, query, orderBy, limit, serverTimestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { getAI, getGenerativeModel, GoogleAIBackend } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-ai.js";
+import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app-check.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBtnzA8Uf5iomh_r9LRuymIVs6zE7_DCqg",
+  authDomain: "profefacil-9318a.firebaseapp.com",
+  projectId: "profefacil-9318a",
+  storageBucket: "profefacil-9318a.firebasestorage.app",
+  messagingSenderId: "830708638867",
+  appId: "1:830708638867:web:9367c43be799372e185966",
+  measurementId: "G-19V3G8BTJQ"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+// App Check protege las llamadas a Gemini. Pega aquí la clave pública
+// del sitio reCAPTCHA Enterprise creado para el dominio de Render/GitHub Pages.
+const RECAPTCHA_ENTERPRISE_SITE_KEY = "CONFIGURAR_RECAPTCHA_ENTERPRISE_SITE_KEY";
+let appCheckReady = false;
+if (RECAPTCHA_ENTERPRISE_SITE_KEY && !RECAPTCHA_ENTERPRISE_SITE_KEY.startsWith("CONFIGURAR_")) {
+  try {
+    initializeAppCheck(app, {
+      provider: new ReCaptchaEnterpriseProvider(RECAPTCHA_ENTERPRISE_SITE_KEY),
+      isTokenAutoRefreshEnabled: true
+    });
+    appCheckReady = true;
+  } catch (e) { console.error("App Check:", e); }
+}
+let model = null;
+try {
+  const ai = getAI(app, {backend:new GoogleAIBackend()});
+  model = getGenerativeModel(ai,{model:"gemini-3.8-flash"});
+} catch(e) { console.error(e); }
+
+const $ = id => document.getElementById(id);
+let user=null, schools=[], activeSchool=null, chats=[], activeChat=null, pendingAction=null, attachedFiles=[];
+let currentTranscript=[];
+const schoolPath = () => collection(db,"users",user.uid,"schools");
+const schoolDoc = () => doc(db,"users",user.uid,"schools",activeSchool.id);
+const sub = name => collection(db,"users",user.uid,"schools",activeSchool.id,name);
+const chatPath = () => collection(db,"users",user.uid,"schools",activeSchool.id,"chats");
+const chatDoc = () => doc(db,"users",user.uid,"schools",activeSchool.id,"chats",activeChat.id);
+const setStatus=(s,type="")=>{$("status").textContent=s;$("status").className="status "+type};
+function modal(id,on=true){$(id).classList.toggle("show",on)}
+function esc(s=""){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function showMsg(role,text){$("welcome").style.display="none";const el=document.createElement("div");el.className="message "+role;el.innerHTML=`<div class="avatar">${role==="user"?"T":"O"}</div><div class="bubble"></div>`;el.querySelector(".bubble").textContent=text;$("messages").append(el);$("chatArea").scrollTop=$("chatArea").scrollHeight;return el.querySelector(".bubble");}
+function showWelcome(){ $("welcome").style.display=""; $("messages").innerHTML=""; }
+function renderSchools(){
+ const box=$("schoolList");box.innerHTML="";
+ if(!schools.length){box.innerHTML='<div class="empty-note">Todavía no agregaste colegios.</div>';return;}
+ schools.forEach(s=>{const b=document.createElement("button");b.className="school "+(activeSchool?.id===s.id?"active":"");b.innerHTML=`<span class="school-dot"></span><span>${esc(s.name)}</span>`;b.onclick=()=>selectSchool(s);box.append(b);});
+}
+function renderChats(){
+ const box=$("chatList");box.innerHTML="";
+ if(!activeSchool){box.innerHTML='<div class="empty-note">Selecciona un colegio.</div>';return;}
+ if(!chats.length){box.innerHTML='<div class="empty-note">Aún no hay conversaciones.</div>';return;}
+ chats.forEach(c=>{const b=document.createElement("button");b.className="chatitem "+(activeChat?.id===c.id?"active":"");b.textContent=c.title||"Nuevo chat";b.onclick=()=>selectChat(c);box.append(b);});
+}
+async function loadSchools(){
+ if(!user)return;const snap=await getDocs(query(schoolPath(),orderBy("createdAt","desc")));
+ schools=snap.docs.map(d=>({id:d.id,...d.data()}));renderSchools();
+ if(activeSchool&&!schools.some(s=>s.id===activeSchool.id))activeSchool=null;
+ if(!activeSchool&&schools.length)await selectSchool(schools[0]);else updateHeader();
+}
+async function selectSchool(s){
+ activeSchool=s;activeChat=null;currentTranscript=[];$("schoolTitle").textContent=s.name;$("schoolSubtitle").textContent="Colegio seleccionado · información privada";renderSchools();
+ const snap=await getDocs(query(chatPath(),orderBy("updatedAt","desc"),limit(40)));
+ chats=snap.docs.map(d=>({id:d.id,...d.data()}));renderChats();showWelcome();setStatus("Listo. Conversación y memoria separadas para este colegio.","ok");$("sidebar").classList.remove("open");
+}
+function updateHeader(){ $("schoolTitle").textContent=activeSchool?.name||"Orlando AI";$("schoolSubtitle").textContent=activeSchool?"Colegio seleccionado · información privada":"Tu espacio de trabajo docente"; }
+async function newChat(){
+ if(!activeSchool){setStatus("Primero crea o selecciona un colegio.","err");return;}
+ const ref=await addDoc(chatPath(),{title:"Nuevo chat",createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
+ activeChat={id:ref.id,title:"Nuevo chat"};currentTranscript=[];chats.unshift(activeChat);renderChats();showWelcome();$("prompt").focus();
+}
+async function selectChat(c){
+ activeChat=c;renderChats();currentTranscript=[];showWelcome();
+ const snap=await getDocs(query(collection(db,"users",user.uid,"schools",activeSchool.id,"chats",c.id,"messages"),orderBy("createdAt","asc"),limit(100)));
+ snap.forEach(d=>{const m=d.data();currentTranscript.push({role:m.role,text:m.text});showMsg(m.role==="user"?"user":"assistant",m.text);});
+}
+async function saveMessage(role,text){
+ if(!activeChat)await newChat();
+ await addDoc(collection(db,"users",user.uid,"schools",activeSchool.id,"chats",activeChat.id,"messages"),{role,text,createdAt:serverTimestamp()});
+ await setDoc(chatDoc(),{updatedAt:serverTimestamp(),title:activeChat.title==="Nuevo chat"&&role==="user"?text.slice(0,42):activeChat.title},{merge:true});
+ if(role==="user"&&activeChat.title==="Nuevo chat"){activeChat.title=text.slice(0,42)||"Nuevo chat";renderChats();}
+}
+async function loadMemory(){
+ const names=["students","grades","attendance","tasks","observations"];
+ const data={};
+ for(const n of names){try{const snap=await getDocs(query(sub(n),limit(100)));data[n]=snap.docs.map(d=>({id:d.id,...d.data()}));}catch(e){data[n]=[];}}
+ return data;
+}
+function fileToPart(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>{const raw=String(r.result).split(",")[1];resolve({inlineData:{data:raw,mimeType:file.type}})};r.onerror=reject;r.readAsDataURL(file);});}
+function extractJson(txt){
+ const clean=txt.replace(/^```(?:json)?\s*/i,"").replace(/\s*```$/,"").trim();
+ try{return JSON.parse(clean);}catch{}
+ const a=clean.indexOf("{"),b=clean.lastIndexOf("}");
+ if(a>=0&&b>a){try{return JSON.parse(clean.slice(a,b+1));}catch{}}
+ return {reply:txt,action:null};
+}
+const systemPrompt = `Eres Orlando AI, un asistente académico inteligente, responsable y cercano para docentes. Habla siempre en español claro. Trabajas SOLO dentro del colegio seleccionado y debes usar la memoria proporcionada para responder preguntas históricas. No inventes nombres, notas, asistencias ni hechos. Si faltan datos, dilo y pregunta.
+Devuelve SIEMPRE un JSON válido, sin markdown, con esta estructura: {"reply":"respuesta visible al profesor","action":null} o {"reply":"explicación de lo que vas a guardar","action":{"collection":"students|grades|attendance|tasks|observations","operation":"add|update|delete","documentId":null,"data":{...}}}.
+Solo propone UNA acción de escritura por respuesta. No propongas acciones si el profesor solo pregunta, pide explicación o solicita crear un examen/documento. Nunca ejecutes la acción: el programa pedirá confirmación al profesor. Para cambios de datos, solicita los campos faltantes antes de proponer la acción.
+Esquema sugerido: students {name, course, section, notes}; grades {studentName, subject, assessment, score, maxScore, date, notes}; attendance {date, studentName, status: present|absent|late|justified, notes}; tasks {title, subject, course, dueDate, description, status}; observations {studentName, date, type, text}.
+Para agregar estudiantes o registrar asistencia/notas, genera action con la colección correcta. Para actualizar o eliminar exige que el registro esté claramente identificado; documentId debe ser el id exacto de la memoria. No inventes documentId.
+Cuando pidan un examen, crea un examen completo y bien estructurado con título, curso, asignatura, objetivos, instrucciones, preguntas variadas, puntaje por pregunta y clave de respuestas separada al final. Adapta dificultad, cantidad y formato a lo pedido. Si adjuntan imágenes, analízalas y basa el material en ellas. En esos casos action debe ser null. Para consultas sobre registros, basa la respuesta solo en MEMORIA.`;
+async function send(){
+ const text=$("prompt").value.trim();if(!text&&!attachedFiles.length)return;
+ if(!user){modal("authModal");setStatus("Inicia sesión para usar Orlando.","err");return;}
+ if(!activeSchool){setStatus("Crea o selecciona un colegio primero.","err");return;}
+ if(!model){setStatus("No se pudo iniciar Gemini. Revisa Firebase AI Logic.","err");return;}
+ if(!appCheckReady){setStatus("Falta configurar la clave pública de reCAPTCHA Enterprise en el HTML para activar App Check y Gemini.","err");return;}
+ const userText=text||"Analiza la imagen adjunta y ayúdame con ella.";
+ $("prompt").value="";const files=attachedFiles.slice();attachedFiles=[];$("attachmentLabel").textContent="";
+ showMsg("user",userText+(files.length?` [${files.length} imagen(es) adjunta(s)]`:""));await saveMessage("user",userText);
+ setStatus("Orlando está pensando…");$("sendBtn").disabled=true;
+ try{
+  const memory=await loadMemory();
+  const context=`COLEGIO: ${activeSchool.name}\nMEMORIA ACADÉMICA ACTUAL (JSON):\n${JSON.stringify(memory).slice(0,45000)}\nINSTRUCCIÓN DEL DOCENTE: ${userText}`;
+  const parts=[{text:systemPrompt+"\n\n"+context},...await Promise.all(files.map(fileToPart))];
+  const result=await model.generateContent(parts);
+  const raw=result.response.text();const parsed=extractJson(raw);
+  const reply=parsed.reply||raw;
+  showMsg("assistant",reply);currentTranscript.push({role:"user",text:userText},{role:"assistant",text:reply});
+  await saveMessage("assistant",reply);
+  if(parsed.action&&["students","grades","attendance","tasks","observations"].includes(parsed.action.collection)&&["add","update","delete"].includes(parsed.action.operation)){
+    pendingAction=parsed.action;
+    $("confirmDetails").textContent=JSON.stringify(pendingAction,null,2);
+    modal("confirmModal");
+  }
+  setStatus("Respuesta guardada en el historial de este colegio.","ok");
+ }catch(e){console.error(e);showMsg("assistant","No pude completar la solicitud. Comprueba que Firebase AI Logic esté habilitado y que App Check esté configurado. Detalle: "+(e.message||e));setStatus("Error al consultar Gemini.","err");}
+ finally{$("sendBtn").disabled=false;}
+}
+async function commitAction(){
+ if(!pendingAction)return;const a=pendingAction;
+ try{
+  const ref=sub(a.collection);
+  if(a.operation==="add")await addDoc(ref,{...a.data,createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
+  else if(a.operation==="update"&&a.documentId)await setDoc(doc(db,"users",user.uid,"schools",activeSchool.id,a.collection,a.documentId),{...a.data,updatedAt:serverTimestamp()},{merge:true});
+  else if(a.operation==="delete"&&a.documentId)await deleteDoc(doc(db,"users",user.uid,"schools",activeSchool.id,a.collection,a.documentId));
+  else throw new Error("Falta un ID de registro válido.");
+  const confirmation="Cambio guardado correctamente en "+a.collection+".";
+  showMsg("assistant",confirmation);await saveMessage("assistant",confirmation);setStatus("Registro actualizado.","ok");
+ }catch(e){alert("No se pudo guardar: "+e.message);}finally{pendingAction=null;modal("confirmModal",false);}
+}
+function downloadWord(){
+ const content=[...$("messages").querySelectorAll(".message")].map(m=>`<p><b>${m.classList.contains("user")?"Docente":"Orlando"}:</b> ${esc(m.querySelector(".bubble").textContent).replace(/\n/g,"<br>")}</p>`).join("");
+ const html=`<!doctype html><html><head><meta charset="utf-8"></head><body><h1>${esc(activeSchool?.name||"Orlando AI")}</h1>${content}</body></html>`;
+ const blob=new Blob([html],{type:"application/msword"});downloadBlob(blob,"Orlando-"+(activeSchool?.name||"documento")+".doc");
+}
+function downloadBlob(blob,name){const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href);}
+async function downloadPdf(){
+ const {jsPDF}=await import("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js").then(()=>({jsPDF:window.jspdf.jsPDF})).catch(()=>({}));
+ if(!jsPDF){alert("No se pudo cargar el generador PDF. Usa Word o inténtalo con conexión.");return;}
+ const pdf=new jsPDF({unit:"mm",format:"a4"});let y=18;pdf.setFontSize(16);pdf.text(activeSchool?.name||"Orlando AI",15,y);y+=12;pdf.setFontSize(10);
+ for(const m of $("messages").querySelectorAll(".message")){const who=m.classList.contains("user")?"Docente":"Orlando";const txt=who+": "+m.querySelector(".bubble").textContent;const lines=pdf.splitTextToSize(txt,180);if(y+lines.length*5>280){pdf.addPage();y=18;}pdf.text(lines,15,y);y+=lines.length*5+5;}
+ pdf.save("Orlando-"+(activeSchool?.name||"documento")+".pdf");
+}
+onAuthStateChanged(auth,async u=>{
+ user=u;
+ if(u){$("userLine").textContent=u.email||"Cuenta conectada";$("accountBtn").style.display="none";$("signOutBtn").style.display="block";setStatus("Cuenta conectada. Cargando colegios…");try{await loadSchools();setStatus("Cuenta conectada.","ok");}catch(e){setStatus("Error cargando datos: "+e.message,"err");}}
+ else{$("userLine").textContent="No has iniciado sesión";$("accountBtn").style.display="block";$("signOutBtn").style.display="none";schools=[];activeSchool=null;chats=[];activeChat=null;renderSchools();renderChats();showWelcome();updateHeader();setStatus("Inicia sesión para comenzar.");}
+});
+$("accountBtn").onclick=()=>modal("authModal");
+$("authCancel").onclick=()=>modal("authModal",false);
+$("loginBtn").onclick=async()=>{try{await signInWithEmailAndPassword(auth,$("email").value,$("password").value);modal("authModal",false);$("authStatus").textContent="";}catch(e){$("authStatus").textContent=e.message;}};
+$("registerBtn").onclick=async()=>{try{await createUserWithEmailAndPassword(auth,$("email").value,$("password").value);modal("authModal",false);}catch(e){$("authStatus").textContent=e.message;}};
+$("signOutBtn").onclick=()=>signOut(auth);
+$("addSchool").onclick=()=>{if(!user){modal("authModal");return;}modal("schoolModal");$("schoolName").focus();};
+$("schoolCancel").onclick=()=>modal("schoolModal",false);
+$("schoolSave").onclick=async()=>{const name=$("schoolName").value.trim();if(!name||!user)return;try{const ref=await addDoc(schoolPath(),{name,createdAt:serverTimestamp()});$("schoolName").value="";modal("schoolModal",false);await loadSchools();const s=schools.find(x=>x.id===ref.id);if(s)await selectSchool(s);}catch(e){alert("No se pudo crear el colegio: "+e.message);}};
+$("newChat").onclick=newChat;
+$("sendBtn").onclick=send;
+$("prompt").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}});
+$("attachBtn").onclick=()=>$("imageInput").click();
+$("imageInput").onchange=e=>{attachedFiles=[...attachedFiles,...Array.from(e.target.files||[]).filter(f=>f.type.startsWith("image/")).slice(0,5)];$("attachmentLabel").textContent=attachedFiles.length?attachedFiles.map(f=>f.name).join(" · "):"";};
+$("acceptChange").onclick=commitAction;
+$("rejectChange").onclick=()=>{pendingAction=null;modal("confirmModal",false);};
+$("exportWord").onclick=downloadWord;
+$("exportPdf").onclick=downloadPdf;
+$("menuBtn").onclick=()=>$("sidebar").classList.toggle("open");
+document.querySelectorAll("[data-prompt]").forEach(b=>b.onclick=()=>{$("prompt").value=b.dataset.prompt;$("prompt").focus();});
+</script>
+</body>
+</html>
